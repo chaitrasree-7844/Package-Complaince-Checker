@@ -1,0 +1,67 @@
+{
+  "passed": 8,
+  "failed": 0,
+  "bugs": [],
+  "action_items": [
+    "No backend test file was added: Upload/Analysis/Compliance-Result screens are frontend localStorage MOCKS per seed_facts, with no API-bearing behavior to cover per the backend-test rule."
+  ],
+  "retest_needed": false,
+  "checks": [
+    {
+      "criterion": "Redesigned Scan a Product upload preserves the existing upload flow",
+      "name": "scan-upload-redesign-flow",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "upload-title shows 'Scan a Product'; a .txt file triggered the existing 'Unsupported file' toast with no selected-file-name; a PNG produced package-image-preview + upload-success-state; replace swapped to a PDF (package-pdf-preview); optional metadata fields accepted input; remove cleared back to upload-dropzone-title; re-adding a JPG and clicking Analyze Product routed to analysis-page."
+    },
+    {
+      "criterion": "Analysis screen presents exactly five staged states without fake progress",
+      "name": "analysis-five-stage-lifecycle",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "analysis-step-title-0..4 matched Image Received/OCR Extraction/Declaration Detection/Compliance Checking/Report Preparation exactly (analysis-step-5 absent); no '% complete' text, no [role=progressbar], no analysis-progress-bar element found; flow auto-routed to compliance-result-page showing the newly created product name."
+    },
+    {
+      "criterion": "Overall returned statuses use the new plain-language mapping",
+      "name": "overall-status-plain-language-mapping",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "ANL-2026-001 (compliant) rendered result-overall-label 'COMPLIANT'; ANL-2026-002 (non_compliant) rendered 'POTENTIAL VIOLATION' with rose-toned result-overall-status; ANL-2026-003 (review_required) rendered 'REQUIRES REVIEW' with amber-toned result-overall-status."
+    },
+    {
+      "criterion": "Compliance Screening Result is evidence-first and data-driven",
+      "name": "compliance-result-evidence-first",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "result-title 'Compliance Screening Result', result-analysis-date contained ANL-2026-001, summary counters (passed/warning/failed/not-detected) visible, result-score-value showed the seeded 98, Product Evidence + Detected Declarations panels rendered check-row-manufacturer and check-value-mrp='₹280.00 (Incl. of all taxes)' straight from seed data."
+    },
+    {
+      "criterion": "Warnings and potential violations expose actionable returned details",
+      "name": "warnings-violations-actionable-details",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Expanding check-details-button-mrp/date on ANL-2026-002 revealed Detected/Why/Recommended text matching seeded reason and recommendation strings; result-violation-mrp-format row showed detected '₹450' and its recommendation; View Details navigated to violation-details-page with matching violation-detected-information and violation-recommendation."
+    },
+    {
+      "criterion": "Image highlighting uses only returned coordinates",
+      "name": "image-highlight-returned-coordinates",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "On ANL-2026-002, mrp-format (has location) auto-showed result-image-highlight and a result-violation-focus-mrp-format button; consumer-care-missing (location: null) had no focus button on the result page and no violation-image-highlight element on its own violation-details-page."
+    },
+    {
+      "criterion": "Existing reports and navigation remain functional",
+      "name": "reports-navigation-existing-flows",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Generate Report opened reports-page pre-selected to ANL-2026-002; report-violation-mrp-format navigated to the correct violation-details-page; New screening returned to upload-page; sidebar Dashboard/Settings links routed correctly; sidebar-logout-button returned to login-form."
+    },
+    {
+      "criterion": "Redesigned screens remain consistent and responsive",
+      "name": "redesigned-screens-responsive-theme-consistency",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "At 390x844, Upload and Compliance Result pages had scrollWidth-clientWidth <= 1px in both light and dark (html.dark toggled via header-theme-toggle) states across all four captured screenshots."
+    }
+  ]
+}

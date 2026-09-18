@@ -1,0 +1,76 @@
+{
+  "passed": 7,
+  "failed": 1,
+  "bugs": [
+    {
+      "criterion": "Dashboard search is an interactive frontend control",
+      "name": "search-panel-open-filter-escape",
+      "severity": "medium",
+      "summary": "Escape does not close the global search panel. Pressing Escape while the desktop search input (type=\"search\") is focused triggers the browser's native 'clear search input' behavior first, which fires the input's onChange handler with an empty value; that handler unconditionally calls setOpen(true), re-opening/keeping open the panel and clearing the query, so the panel never closes. Reproduced twice (not flaky) in frontend/src/components/layout/GlobalSearch.tsx lines 56-62 and 86 (onChange always calling setOpen(true), racing with the Escape handler's setOpen(false)).",
+      "evidence": "run_browser_script 'search-panel-open-filter-escape' failed on both runs at the same assertion: expect(getByTestId('global-search-panel')).not.toBeVisible() timed out after Escape was pressed with query='Dashboard'; failure screenshot shows the panel still open with the query reset to the unfiltered full entry list (placeholder visible in the input), confirming onChange re-fired setOpen(true) instead of the panel closing. Screenshot: /app/.emergent/scripts/checks/search-panel-open-filter-escape.mjs run artifacts."
+    }
+  ],
+  "action_items": [
+    "No backend test file was added: search and notifications are explicitly frontend-only MOCKS reading the existing localStorage-backed mockAnalysisApi per seed_facts/spec_deviations, with no new API-bearing behavior to cover.",
+    "Fix the Escape-to-close bug in GlobalSearch.tsx: the input's onChange should not force setOpen(true) when the browser's native Escape-clear fires, or the Escape keydown handler should stopPropagation/run before the native clear, e.g. handle Escape in the input's own onKeyDown before it bubbles, or track open state separately from query changes."
+  ],
+  "retest_needed": true,
+  "checks": [
+    {
+      "criterion": "Dashboard search is an interactive frontend control",
+      "name": "search-panel-open-filter-escape",
+      "lane": "browser",
+      "status": "failed",
+      "evidence": "Search input is focusable, click opens global-search-panel, typing 'Dashboard' filters to the single matching page result correctly (screenshot: typed-dashboard). Escape does NOT close the panel: expect(panel).not.toBeVisible() timed out on two separate runs (not flaky), panel remained visible with query reset to the unfiltered list instead of closing."
+    },
+    {
+      "criterion": "Search finds all navigation pages",
+      "name": "search-finds-navigation-pages",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Queries 'Upload','Results','Reports','Settings','Dashboard' each surfaced global-search-result-page-<id> and clicking navigated to /upload, /results, /reports, /settings, /dashboard respectively (5 screenshots captured)."
+    },
+    {
+      "criterion": "Search finds analyses by product and manufacturer",
+      "name": "search-finds-analyses-by-product-manufacturer",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Query 'Premia' and query 'NutriCraft' both surfaced global-search-result-analysis-ANL-2026-002; selecting it navigated to /results/ANL-2026-002 in both cases. Gibberish query 'zzzznonexistentqueryxyz' rendered global-search-empty-state with 'No matches found'."
+    },
+    {
+      "criterion": "Search keyboard behavior works",
+      "name": "search-keyboard-shortcuts",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Ctrl+K opened global-search-panel and global-search-input received focus (expect(input).toBeFocused() passed). Typing 'Reports' + Enter navigated to /reports (first match). Reopening with Ctrl+K, typing 'Settings', then clicking global-search-clear-button reset the input to empty value."
+    },
+    {
+      "criterion": "Notification button opens a useful popup",
+      "name": "notifications-panel-shows-recent-analyses",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "notifications-button opened notifications-panel showing notification-item-ANL-2026-001/002/003 with real product names (Organic Multi-Grain Flour, Premia Roasted Almonds, Cold Pressed Sunflower Oil) and matching statuses (Compliant, Potential Violation, Requires Review); notifications-unread-count and notification-unread-indicator visible; notifications-view-all-button present."
+    },
+    {
+      "criterion": "Notifications link to matching results",
+      "name": "notification-click-marks-read-and-navigates",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Clicking notification-item-ANL-2026-002 closed notifications-panel (not visible) and navigated to /results/ANL-2026-002. Reopening the panel afterward showed the unread badge count drop from 3 to 2 and the Premia item's unread dot removed (screenshot: reopened-panel-after-read)."
+    },
+    {
+      "criterion": "Notification read state persists",
+      "name": "notification-read-state-persists-after-reload",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Clicking notifications-mark-all-button removed notification-unread-indicator; localStorage key package_compliance_checker_db:read-notification-ids contained ['analysis-ANL-2026-001','analysis-ANL-2026-002','analysis-ANL-2026-003']; after page.reload(), unread indicator remained absent and notifications-panel reopened with the same read state."
+    },
+    {
+      "criterion": "Search and notifications work responsively without regressions",
+      "name": "responsive-mobile-search-notifications-and-shell",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "At 390x844: mobile-search-button opened global-search-mobile-input, filtering 'Upload' and selecting the result navigated to /upload; notifications-panel opened with document.scrollWidth - clientWidth <= 1 (no horizontal overflow); header-theme-toggle switched html to dark class; profile-menu-link remained visible in topbar; sidebar nav-results-link navigated to /results; sidebar-logout-button returned to the login form (getByPlaceholder('you@company.com') visible)."
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "passed": 8,
+  "failed": 0,
+  "bugs": [],
+  "action_items": [
+    "Authentication, OCR, compliance status/score/violations, and reports are MOCKED through frontend localStorage services per the specification; no real backend integration is wired.",
+    "Backend suite completed with no tests collected; the only probed backend route /api/ returned 200 Hello World and is not used by these frontend flows."
+  ],
+  "retest_needed": false,
+  "checks": [
+    {
+      "criterion": "Authentication supports signup/login for Normal User and Authorized User, with signup email usable on Login",
+      "name": "authentication-signup-login-logout",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Created a unique Authorized User account, verified signup forwarded its email to Login, signed in, opened Settings, logged out, and returned to /login."
+    },
+    {
+      "criterion": "Dashboard renders dynamic compliance analytics and recent analysis actions",
+      "name": "dashboard-compliance-analytics",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Authenticated Dashboard rendered metrics, compliance-trend card, recent analyses, and Upload navigation without blank state."
+    },
+    {
+      "criterion": "Upload supports JPG/JPEG/PNG/PDF selection, drag/drop presentation, preview, metadata, remove, and analysis start",
+      "name": "upload-package-file-analysis-start",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Selected an in-memory PNG via file input, verified selected filename and Ready to analyze state, entered metadata, and reached the Analysis screen with progress/steps."
+    },
+    {
+      "criterion": "Analysis processing completes and navigates to a dynamic result",
+      "name": "analysis-completes-dynamic-result",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Uploaded a unique JPEG package, observed Analysis, waited for completion, and verified a result containing the submitted product plus returned score."
+    },
+    {
+      "criterion": "Compliance result and violation details are fully navigable",
+      "name": "compliance-result-violation-details",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Opened the seeded Premia Roasted Almonds result, verified summary/checklist/violations cards, opened a violation button, and rendered violation details."
+    },
+    {
+      "criterion": "Results history supports status tabs/search and report selection",
+      "name": "results-history-search-status-navigation",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Opened Results, changed the Compliant status tab, searched Organic Multi-Grain Flour, and opened its matching View result action."
+    },
+    {
+      "criterion": "Reports supports print/share/download actions and disclaimer",
+      "name": "reports-export-actions-disclaimer",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Rendered report document, package image, and disclaimer; Download PDF emitted a .pdf download; Share and Print controls responded."
+    },
+    {
+      "criterion": "Responsive protected shell and settings work on mobile and desktop",
+      "name": "responsive-settings-shell",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "At 390x844 authenticated shell showed mobile menu, opened sidebar, navigated to Settings, and rendered account/preferences/security cards plus logout."
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "passed": 7,
+  "failed": 0,
+  "bugs": [],
+  "action_items": [
+    "No backend test file was added for this iteration: theme and greeting are entirely client-side (localStorage/device time), with no API-bearing behavior to cover per the backend-test rule."
+  ],
+  "retest_needed": false,
+  "checks": [
+    {
+      "criterion": "Dashboard greeting follows the user's local time boundaries",
+      "name": "dashboard-greeting-time-boundaries",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Mocked clock to 09:00/14:00/19:00/02:00 across reloads on the authenticated Dashboard; dashboard-eyebrow showed 'Good Morning, reviewer', 'Good Afternoon', 'Good Evening', and 'Good Evening' respectively."
+    },
+    {
+      "criterion": "Greeting updates automatically without a page refresh",
+      "name": "dashboard-greeting-auto-updates",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "With clock installed at 11:59:30, dashboard-eyebrow read 'Good Morning'; advancing the clock past 12:00 and running timers (no navigation) flipped it to 'Good Afternoon'; a synthetic visibilitychange event at 18:00 flipped it to 'Good Evening'."
+    },
+    {
+      "criterion": "First visit theme follows device preference",
+      "name": "theme-first-visit-device-preference",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "With package_compliance_checker_theme cleared, emulateMedia(dark) produced <html class=\"dark\"> on reload; emulateMedia(light) produced <html> without the dark class."
+    },
+    {
+      "criterion": "Header theme toggle switches and persists theme",
+      "name": "header-theme-toggle-persists",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Clicking header-theme-toggle toggled html.dark, flipped aria-label between 'Switch to dark mode'/'Switch to light mode', wrote 'dark'/'light' to localStorage[package_compliance_checker_theme], and both states survived page reload."
+    },
+    {
+      "criterion": "Settings theme control stays synchronized with the header",
+      "name": "settings-theme-synced-with-header",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "settings-theme-toggle showed 'Dark mode' while light was active; clicking it applied html.dark and relabeled to 'Light mode'; header-theme-toggle on the same and a subsequently navigated Dashboard page reflected the identical dark state."
+    },
+    {
+      "criterion": "Light and dark themes remain readable across the existing app",
+      "name": "dark-theme-readability-across-app",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "In dark mode, Dashboard metrics/trend/violation cards, recent-analyses table, Results, and Settings inputs all rendered with dark (non-white, rgb non 255,255,255) card backgrounds and legible light text; screenshots captured for each page."
+    },
+    {
+      "criterion": "Theme controls remain usable on mobile",
+      "name": "theme-toggle-mobile-usable",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "At 390x844, header-theme-toggle was visible and toggled html.dark; document.scrollWidth <= clientWidth in both dark and light (no horizontal overflow); mobile-menu-button opened the sidebar showing the Settings link over the dark surface."
+    }
+  ]
+}

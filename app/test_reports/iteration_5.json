@@ -1,0 +1,16 @@
+{
+  "passed": 1,
+  "failed": 0,
+  "bugs": [],
+  "action_items": [],
+  "retest_needed": false,
+  "checks": [
+    {
+      "criterion": "Dashboard search is an interactive frontend control",
+      "name": "search-panel-open-filter-escape",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Re-ran persisted check (no script re-sent) against the previously reported Escape-to-close bug (iteration_4). Flow: login -> click global-search-input -> panel opens (global-search-panel visible) -> fill 'Dashboard' -> panel still visible with filtered result -> press Escape -> expect(global-search-panel).not.toBeVisible() PASSED. Reproduced twice consecutively (2 separate runs, both PASSED), confirming the fix in GlobalSearch.tsx is resolved and not flaky. Screenshots: opened-empty, typed-dashboard, closed-after-escape."
+    }
+  ]
+}
